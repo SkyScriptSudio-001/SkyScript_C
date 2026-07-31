@@ -1,4 +1,4 @@
-# SkyScript (大陆版 / China Edition)
+# SkyScript
 
 > 专为高效能自动化、快速任务执行与网页嵌入所设计的轻量级直译式脚本语言。
 
