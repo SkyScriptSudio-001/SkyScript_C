@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyScript 官方网站 - 现代轻量级脚本语言平台</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0; padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0b0f19; color: #f1f5f9;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 24px 48px; background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-dot { width: 14px; height: 14px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 16px #38bdf8; }
+        .logo-text { font-size: 20px; font-weight: 700; color: #f8fafc; }
+        nav a { color: #94a3b8; text-decoration: none; margin-left: 28px; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        nav a:hover { color: #38bdf8; }
+        .main-content { flex: 1; max-width: 900px; margin: 0 auto; padding: 60px 24px; width: 100%; }
+        .hero { text-align: center; margin-bottom: 60px; }
+        h1 { font-size: 42px; font-weight: 800; color: #f8fafc; margin: 0 0 16px 0; }
+        p.subtitle { font-size: 17px; color: #94a3b8; line-height: 1.6; max-width: 650px; margin: 0 auto; }
+        .section-box {
+            background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 32px; margin-bottom: 30px; backdrop-filter: blur(8px);
+        }
+        h2 { font-size: 20px; color: #f8fafc; margin-top: 0; margin-bottom: 16px; }
+        p, li { color: #cbd5e1; font-size: 15px; line-height: 1.7; }
+        ul { padding-left: 20px; margin: 10px 0; }
+        code {
+            background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2px 6px; border-radius: 6px; font-family: monospace; font-size: 13px; color: #38bdf8;
+        }
+        .btn-github {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white; text-decoration: none; padding: 12px 24px; border-radius: 10px;
+            font-weight: 600; font-size: 14px; box-shadow: 0 4px 16px rgba(2, 132, 199, 0.3);
+        }
+        footer { text-align: center; padding: 24px; color: #64748b; font-size: 13px; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+            <div class="logo-dot"></div>
+            <span class="logo-text">SkyScript 官网</span>
+        </div>
+        <nav>
+            <a href="editor.html">网页编辑器 (.skyc)</a>
+            <a href="#download">GitHub 下载</a>
+        </nav>
+    </header>
+    <div class="main-content">
+        <div class="hero">
+            <h1>轻量级脚本语言 SkyScript</h1>
+            <p class="subtitle">专为高效能自动化与网页嵌入设计的直译式语言，全面支援SkyScript生态系。</p>
+        </div>
+        <div class="section-box">
+            <h2>📖 快速入门与教程</h2>
+            <ul>
+                <li><code>set prog ... end prog</code>：宣告脚本程式区块的起点与终点。</li>
+                <li><code>print "讯息"</code>：在终端机输出文字内容。</li>
+                <li><code>skip to ... here</code>：区块略过机制。</li>
+            </ul>
+        </div>
+        <div id="download" class="section-box">
+            <h2>🚀 GitHub 源码与下载</h2>
+            <p>您可以前往我们的 GitHub 取得完整专案与发布包：</p><br>
+            <a href="#" id="cnGithubLink" target="_blank" class="btn-github">📦 前往 GitHub 下载</a>
+        </div>
+    </div>
+    <footer>&copy; 2026 SkyScript Project. All rights reserved.</footer>
+</body>
+</html>

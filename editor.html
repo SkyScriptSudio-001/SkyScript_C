@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+    <meta charset='UTF-8'>
+    <title>SkyScript Modern IDE (CN)</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/ayu-dark.min.css'>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0b0f19; color: #f1f5f9; margin: 0; padding: 24px; display: flex; flex-direction: column; height: 100vh; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 16px 24px; background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-dot { width: 12px; height: 12px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 12px #38bdf8; }
+        h1 { font-size: 18px; font-weight: 600; color: #f8fafc; margin: 0; }
+        .actions { display: flex; gap: 10px; }
+        button, label.btn-file { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); display: inline-flex; align-items: center; }
+        button:hover, label.btn-file:hover { transform: translateY(-1px); background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%); }
+        input[type='file'] { display: none; }
+        .main-container { display: flex; gap: 20px; flex: 1; min-height: 0; }
+        .panel { flex: 1; display: flex; flex-direction: column; background: #131b2e; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
+        .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-top: 0; margin-bottom: 14px; font-weight: 600; }
+        .CodeMirror { flex: 1; height: auto !important; border-radius: 10px; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; line-height: 1.6; border: 1px solid rgba(255, 255, 255, 0.06); background: #0d1322 !important; }
+        .CodeMirror-gutters { background: #0d1322 !important; border-right: 1px solid rgba(255, 255, 255, 0.04) !important; }
+        .CodeMirror-linenumber { color: #475569 !important; }
+        .cm-skyscript-keyword { color: #ff77ff; font-weight: bold; }
+        .cm-skyscript-command { color: #39ffee; font-weight: bold; }
+        .cm-skyscript-string { color: #bae6fd; }
+        .cm-skyscript-comment { color: #6272a4; font-style: italic; }
+        .terminal-box { flex: 1; background: #0d1322; color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 16px; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 13px; line-height: 1.6; overflow-y: auto; }
+        .terminal-header { color: #64748b; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); padding-bottom: 10px; margin-bottom: 12px; }
+        .terminal-line { margin-bottom: 6px; white-space: pre-wrap; }
+        .terminal-prompt { color: #38bdf8; margin-right: 6px; font-weight: bold; }
+        .terminal-error { color: #f87171; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class='logo-area'>
+            <div class='logo-dot'></div>
+            <h1>SkyScript 网页 IDE (大陆版)</h1>
+        </div>
+        <div class='actions'>
+            <label class='btn-file'>📁 打开文件<input type='file' id='fileInput' accept='.skyc,.sky,.txt' onchange='openFile(event)'></label>
+            <button onclick='saveFile()'>💾 保存文件</button>
+            <button onclick='runCode()'>▶ 运行程序 (Run)</button>
+        </div>
+    </header>
+    <div class='main-container'>
+        <div class='panel'>
+            <h2>代码编辑器 (Code Editor)</h2>
+            <textarea id='codeArea'>set prog
+    set window.title "SkyScript 高级网页编辑器"
+    set window.size "1200x800"
+    
+    ## 这是一则测试注释
+    print "欢迎使用全新高级版 SkyScript IDE！"
+    
+    name = "Sky"
+    score = "100"
+    print name
+    
+    skip to
+        这段代码会被 skip 机制自动略过
+    here
+    
+    print "执行完毕！"
+end prog</textarea>
+        </div>
+        <div class='panel'>
+            <h2>终端机输出 (Terminal Output)</h2>
+            <div id='outputArea' class='terminal-box'>
+                <div class='terminal-header'>SkyScript v1.0.0 [就绪]</div>
+                <div class='terminal-line' style='color: #64748b;'>点击上方“运行程序”以启动编译与解释器...</div>
+            </div>
+        </div>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js'></script>
+    <script>
+        CodeMirror.defineMode('skyscript', function() {
+            return {
+                token: function(stream) {
+                    if (stream.eatSpace()) return null;
+                    if (stream.match(/^##.*/)) { stream.skipToEnd(); return 'skyscript-comment'; }
+                    if (stream.match(/^"[^"]*"/)) { return 'skyscript-string'; }
+                    if (stream.match(/\bwindow\.(title|size)\b/)) { return 'skyscript-command'; }
+                    if (stream.match(/\b(set prog|end prog|set|skip to|skip|here|print)\b/)) { return 'skyscript-keyword'; }
+                    stream.next();
+                    return null;
+                }
+            };
+        });
+        var editor = CodeMirror.fromTextArea(document.getElementById('codeArea'), {
+            lineNumbers: true,
+            theme: 'ayu-dark',
+            mode: 'skyscript',
+            indentUnit: 4,
+            tabSize: 4,
+            lineWrapping: true,
+            autoCloseBrackets: true
+        });
+
+        function openFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                editor.setValue(e.target.result);
+            };
+            reader.readAsText(file);
+        }
+
+        function saveFile() {
+            const code = editor.getValue();
+            const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'program.skyc';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function runCode() {
+            const code = editor.getValue();
+            const outputArea = document.getElementById('outputArea');
+            let terminalHtml = '<div class=\'terminal-header\'>SkyScript v1.0.0 [正在执行进程...]</div>';
+            const lines = code.split('\n');
+            let i = 0, hasOutput = false;
+            while (i < lines.length) {
+                let line = lines[i].trim();
+                if (!line || line.startsWith('##')) { i++; continue; }
+                hasOutput = true;
+                if (line.startsWith('set window.title')) {
+                    let title = line.replace('set window.title', '').trim().replace(/^"|"$/g, '');
+                    terminalHtml += `<div class='terminal-line'><span class='terminal-prompt'>&gt;&gt;</span> [窗口标题]: ${title}</div>`;
+                } else if (line.startsWith('set window.size')) {
+                    let size = line.replace('set window.size', '').trim().replace(/^"|"$/g, '');
+                    terminalHtml += `<div class='terminal-line'><span class='terminal-prompt'>&gt;&gt;</span> [窗口大小]: ${size}</div>`;
+                } else if (line.startsWith('print ')) {
+                    let content = line.substring(6).trim().replace(/^"|"$/g, '');
+                    terminalHtml += `<div class='terminal-line' style='color: #38bdf8;'><span class='terminal-prompt'>&gt;&gt;</span> ${content}</div>`;
+                } else if (line === 'skip to' || line === 'skip') {
+                    terminalHtml += `<div class='terminal-line' style='color: #facc15;'><span class='terminal-prompt'>&gt;&gt;</span> 正在略过代码块...</div>`;
+                    i++;
+                    while (i < lines.length) {
+                        if (lines[i].trim() === 'here') break;
+                        i++;
+                    }
+                } else if (line.includes('=')) {
+                    let parts = line.split('=');
+                    let varName = parts[0].trim();
+                    let varValue = parts[1].trim().replace(/^"|"$/g, '');
+                    terminalHtml += `<div class='terminal-line' style='color: #4ade80;'><span class='terminal-prompt'>&gt;&gt;</span> 变量 [${varName}] = ${varValue}</div>`;
+                }
+                i++;
+            }
+            if (!hasOutput) {
+                terminalHtml += `<div class='terminal-line terminal-error'>&gt;&gt; 错误：未找到可执行的指令。</div>`;
+            } else {
+                terminalHtml += `<div class='terminal-line' style='color: #64748b; margin-top: 10px;'>[程序已成功退出，代码 0]</div>`;
+            }
+            outputArea.innerHTML = terminalHtml;
+            outputArea.scrollTop = outputArea.scrollHeight;
+        }
+    </script>
+</body>
+</html>
