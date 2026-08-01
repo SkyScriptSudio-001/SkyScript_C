@@ -20,7 +20,7 @@
 
 ```skyscript
 set prog
-    set window.title "SkyScript 大陆版平台"
+    set window.title "SkyScript 平台"
     set window.size "1200x800"
     
     ## 这是一个测试批注
