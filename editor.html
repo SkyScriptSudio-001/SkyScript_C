@@ -197,7 +197,7 @@
     <header>
         <div class="logo-area">
             <div class="logo-dot"></div>
-            <h1>SkyScript</h1>
+            <h1>SkyScript (标准语法格式)</h1>
         </div>
         <div class="header-actions">
             <button id="adminBtn" class="btn-admin" onclick="openAdminModal()">🛡️ SKY21CN 审核后台</button>
@@ -218,16 +218,19 @@
     <div class="main-container">
         <div class="panel">
             <h2>代码编辑器</h2>
-            <textarea id="codeArea">int score = 95
+            <textarea id="codeArea">set prog
+##这是一开始要有的东西##
+int score = 95
 string name = "SkyScript"
-
+##这是一条注释示例##
 print("当前得分: " + score)
 
 if score >= 90
     print("评级: 优秀！")
 else
     print("评级: 需要加油")
-</textarea>
+end prog
+##这是最尾端要有的东西##</textarea>
         </div>
         <div class="panel">
             <h2>终端输出</h2>
@@ -566,14 +569,29 @@ else
             `).join('') : `<div class="terminal-line" style="color: #64748b;">暂无待审批申请。</div>`;
         }
 
-        // 核心：支持无大括号、通过缩进来分块的 SkyScript 解释器（带 int/string 类型显式声明）
+        // 核心：支持 set prog / end prog、无大括号、##注解##、int/string 显式声明的 SkyScript 解释器
         function finishAuditAndRun() {
             document.getElementById('sky21cnAuditModal').style.display = 'none';
             const code = editor.getValue();
             const outputArea = document.getElementById('outputArea');
-            outputArea.innerHTML = `<div class="terminal-header">执行结果 (无大括号类型显式声明风格)</div>`;
+            outputArea.innerHTML = `<div class="terminal-header">执行结果 (标准 SkyScript 格式)</div>`;
             
             try {
+                let rawLines = code.split('\n').map(l => l.trim());
+                
+                // 校验首尾标记
+                let hasStart = false;
+                let hasEnd = false;
+                for (let l of rawLines) {
+                    if (l === 'set prog') hasStart = true;
+                    if (l === 'end prog') hasEnd = true;
+                }
+
+                if (!hasStart || !hasEnd) {
+                    outputArea.innerHTML += `<div class="terminal-line" style="color: #ef4444;">>> 语法错误: 代码必须以 "set prog" 开始，并以 "end prog" 结束！</div>`;
+                    return;
+                }
+
                 let variables = {};
                 function evalExpr(expr) {
                     expr = expr.trim();
@@ -589,12 +607,11 @@ else
                     return expr;
                 }
 
-                let rawLines = code.split('\n');
                 let lines = [];
-                // 计算每行的缩进级别，并过滤掉空行和纯注释
                 for (let raw of rawLines) {
                     let trimmed = raw.trim();
-                    if (!trimmed || trimmed.startsWith('//')) continue;
+                    // 过滤空行、##注解##、以及首尾固定结构行
+                    if (!trimmed || trimmed.startsWith('##') || trimmed === 'set prog' || trimmed === 'end prog') continue;
                     let indent = raw.length - raw.trimLeft().length;
                     lines.push({ text: trimmed, indent: indent });
                 }
@@ -665,15 +682,17 @@ else
 
                         // 收集缩进大于 if 的行作为 if 块
                         while (i < lines.length && lines[i].indent > baseIndent) {
-                            if (lines[i].text.startsWith('else')) {
+                            let subText = lines[i].text;
+                            if (subText.startsWith('##')) { i++; continue; } // 跳过块内注解
+                            if (subText.startsWith('else')) {
                                 parsingElse = true;
                                 i++;
                                 continue;
                             }
                             if (!parsingElse) {
-                                ifBlockLines.push(lines[i].text);
+                                ifBlockLines.push(subText);
                             } else {
-                                elseBlockLines.push(lines[i].text);
+                                elseBlockLines.push(subText);
                             }
                             i++;
                         }
