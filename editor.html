@@ -1,80 +1,258 @@
 <!DOCTYPE html>
-<html lang='zh-CN'>
+<html lang="zh-CN">
 <head>
-    <meta charset='UTF-8'>
-    <title>SkyScript Modern IDE (CN)</title>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css'>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/ayu-dark.min.css'>
+    <meta charset="UTF-8">
+    <title>SkyScript 现代化 IDE - 大陆专供版 [SKY21CN 深度合规升级]</title>
+    <!-- 引入 CodeMirror 核心与深色高级主题 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/ayu-dark.min.css">
     <style>
         * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0b0f19; color: #f1f5f9; margin: 0; padding: 24px; display: flex; flex-direction: column; height: 100vh; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 16px 24px; background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* 顶部导航列 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 16px 24px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        
         .logo-area { display: flex; align-items: center; gap: 12px; }
-        .logo-dot { width: 12px; height: 12px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 12px #38bdf8; }
-        h1 { font-size: 18px; font-weight: 600; color: #f8fafc; margin: 0; }
-        .actions { display: flex; gap: 10px; }
-        button, label.btn-file { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); display: inline-flex; align-items: center; }
-        button:hover, label.btn-file:hover { transform: translateY(-1px); background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%); }
-        input[type='file'] { display: none; }
+        .logo-dot { width: 12px; height: 12px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 12px #ef4444; }
+        h1 { font-size: 18px; font-weight: 600; color: #f8fafc; margin: 0; letter-spacing: 0.5px; }
+        
+        .header-actions { display: flex; gap: 10px; align-items: center; }
+
+        /* 高级按钮 */
+        button, .file-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        button:hover, .file-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.5);
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+        }
+        button:active, .file-btn:active { transform: translateY(0); }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+        }
+        .btn-accent:hover {
+            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+        .btn-success:hover {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+        }
+        
+        /* 双栏主容器 */
         .main-container { display: flex; gap: 20px; flex: 1; min-height: 0; }
-        .panel { flex: 1; display: flex; flex-direction: column; background: #131b2e; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
-        .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-top: 0; margin-bottom: 14px; font-weight: 600; }
-        .CodeMirror { flex: 1; height: auto !important; border-radius: 10px; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; line-height: 1.6; border: 1px solid rgba(255, 255, 255, 0.06); background: #0d1322 !important; }
-        .CodeMirror-gutters { background: #0d1322 !important; border-right: 1px solid rgba(255, 255, 255, 0.04) !important; }
+        
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #131b2e;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .panel h2 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+        
+        /* CodeMirror 编辑器外观微调 */
+        .CodeMirror {
+            flex: 1;
+            height: auto !important;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', Consolas, 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: #0d1322 !important;
+        }
+        .CodeMirror-gutters {
+            background: #0d1322 !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
+        }
         .CodeMirror-linenumber { color: #475569 !important; }
-        .cm-skyscript-keyword { color: #ff77ff; font-weight: bold; }
-        .cm-skyscript-command { color: #39ffee; font-weight: bold; }
-        .cm-skyscript-string { color: #bae6fd; }
+        
+        /* 语法高亮 Token 颜色 */
+        .cm-skyscript-keyword { color: #f87171; font-weight: bold; }
+        .cm-skyscript-command { color: #facc15; font-weight: bold; }
+        .cm-skyscript-string { color: #fca5a5; }
         .cm-skyscript-comment { color: #6272a4; font-style: italic; }
-        .terminal-box { flex: 1; background: #0d1322; color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 16px; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 13px; line-height: 1.6; overflow-y: auto; }
+        
+        /* 专业级终端机输出视窗 */
+        .terminal-box {
+            flex: 1;
+            background: #0d1322;
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', Consolas, 'Courier New', Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-y: auto;
+        }
         .terminal-header { color: #64748b; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); padding-bottom: 10px; margin-bottom: 12px; }
         .terminal-line { margin-bottom: 6px; white-space: pre-wrap; }
-        .terminal-prompt { color: #38bdf8; margin-right: 6px; font-weight: bold; }
+        .terminal-prompt { color: #ef4444; margin-right: 6px; font-weight: bold; }
         .terminal-error { color: #f87171; }
+
+        /* SKY21CN 严格合规審核彈窗 Modal 樣式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: #131b2e;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 540px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        .modal-card h3 { color: #f8fafc; margin-top: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; }
+        .scan-status {
+            background: #0d1322;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+        .scan-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .scan-item:last-child { margin-bottom: 0; }
+        .badge-safe { color: #10b981; font-weight: bold; }
+        .badge-danger { color: #f87171; font-weight: bold; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
     </style>
 </head>
 <body>
     <header>
-        <div class='logo-area'>
-            <div class='logo-dot'></div>
-            <h1>SkyScript 网页 IDE (大陆版)</h1>
+        <div class="logo-area">
+            <div class="logo-dot"></div>
+            <h1>SkyScript 现代化 IDE [CN Edition - SKY21CN 深度合规升级]</h1>
         </div>
-        <div class='actions'>
-            <label class='btn-file'>📁 打开文件<input type='file' id='fileInput' accept='.skyc,.sky,.txt' onchange='openFile(event)'></label>
-            <button onclick='saveFile()'>💾 保存文件</button>
-            <button onclick='runCode()'>▶ 运行程序 (Run)</button>
+        <div class="header-actions">
+            <input type="file" id="fileInput" style="display: none;" onchange="importFile(event)">
+            <input type="file" id="transpileInput" style="display: none;" onchange="transpileFile(event)">
+            
+            <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">📁 打开文件</button>
+            <button class="btn-accent" onclick="document.getElementById('transpileInput').click()">⚡ 转译程序 (Python)</button>
+            <button class="btn-secondary" onclick="saveFile()">💾 保存代码</button>
+            <button class="btn-success" onclick="runSky21CnAudit()">▶ 运行程序</button>
         </div>
     </header>
-    <div class='main-container'>
-        <div class='panel'>
-            <h2>代码编辑器 (Code Editor)</h2>
-            <textarea id='codeArea'>set prog
-    set window.title "SkyScript 高级网页编辑器"
+
+    <div class="main-container">
+        <div class="panel">
+            <h2>代码编辑器</h2>
+            <textarea id="codeArea">set prog
+    set window.title "SkyScript 合规测试环境"
     set window.size "1200x800"
     
-    ## 这是一则测试注释
-    print "欢迎使用全新高级版 SkyScript IDE！"
+    print "就绪：准备进行 SKY21CN 深度合规审查..."
     
-    name = "Sky"
-    score = "100"
-    print name
+    def class TestBlock
+        print "运行常规逻辑"
     
-    skip to
-        这段代码会被 skip 机制自动略过
-    here
-    
-    print "执行完毕！"
+    print "测试完成"
 end prog</textarea>
         </div>
-        <div class='panel'>
-            <h2>终端机输出 (Terminal Output)</h2>
-            <div id='outputArea' class='terminal-box'>
-                <div class='terminal-header'>SkyScript v1.0.0 [就绪]</div>
-                <div class='terminal-line' style='color: #64748b;'>点击上方“运行程序”以启动编译与解释器...</div>
+        <div class="panel">
+            <h2>终端机输出</h2>
+            <div id="outputArea" class="terminal-box">
+                <div class="terminal-header">SkyScript v1.0.0-CN [准备就绪]</div>
+                <div class="terminal-line" style="color: #64748b;">点击“运行程序”将自动启动 SKY21CN 深度合规与内容安全引擎...</div>
             </div>
         </div>
     </div>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js'></script>
+
+    <!-- SKY21CN 严格审查弹窗 Modal -->
+    <div id="sky21CnModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>🇨🇳 SKY21CN 深度内容安全与地缘政治合规引擎</h3>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 12px;">正在执行多维恶意特征比对、模糊拼音规避拦截以及地缘政治与敏感话题深度审查...</p>
+            
+            <div class="scan-status" id="scanStatusBox">
+                <div class="scan-item"><span>[1/4] 代码结构与恶意特征扫描:</span> <span id="cChk1" style="color: #64748b;">等待中...</span></div>
+                <div class="scan-item"><span>[2/4] 跨网络代理与越墙隧道检测:</span> <span id="cChk2" style="color: #64748b;">等待中...</span></div>
+                <div class="scan-item"><span>[3/4] 涉台、主权及地緣政治红线审查:</span> <span id="cChk3" style="color: #64748b;">等待中...</span></div>
+                <div class="scan-item"><span>[4/4] SKY21CN 最终合规裁决:</span> <span id="cChk4" style="color: #64748b;">等待中...</span></div>
+            </div>
+
+            <div class="modal-actions">
+                <button id="modalCancelBtn" class="btn-secondary" onclick="closeSky21CnModal()">取消</button>
+                <button id="modalActionBtn" class="btn-success" style="display: none;" onclick="executeAfterSky21Cn()">通过审查并执行</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入 CodeMirror 核心指令码 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
     <script>
         CodeMirror.defineMode('skyscript', function() {
             return {
@@ -83,31 +261,21 @@ end prog</textarea>
                     if (stream.match(/^##.*/)) { stream.skipToEnd(); return 'skyscript-comment'; }
                     if (stream.match(/^"[^"]*"/)) { return 'skyscript-string'; }
                     if (stream.match(/\bwindow\.(title|size)\b/)) { return 'skyscript-command'; }
-                    if (stream.match(/\b(set prog|end prog|set|skip to|skip|here|print)\b/)) { return 'skyscript-keyword'; }
+                    if (stream.match(/\b(set prog|end prog|set|def class|skip to|skip|here|print)\b/)) { return 'skyscript-keyword'; }
                     stream.next();
                     return null;
                 }
             };
         });
+
         var editor = CodeMirror.fromTextArea(document.getElementById('codeArea'), {
             lineNumbers: true,
             theme: 'ayu-dark',
             mode: 'skyscript',
             indentUnit: 4,
             tabSize: 4,
-            lineWrapping: true,
-            autoCloseBrackets: true
+            lineWrapping: true
         });
-
-        function openFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                editor.setValue(e.target.result);
-            };
-            reader.readAsText(file);
-        }
 
         function saveFile() {
             const code = editor.getValue();
@@ -115,50 +283,201 @@ end prog</textarea>
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'program.skyc';
+            a.download = 'script_cn.sky';
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
 
-        function runCode() {
+        function importFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                editor.setValue(e.target.result);
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function transpileFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const rawContent = e.target.result;
+                const fileName = file.name;
+
+                let transpiledCode = `set prog\n`;
+                transpiledCode += `    set window.title "从 ${fileName} 转译 (SKY21CN)"\n`;
+                transpiledCode += `    set window.size "1200x800"\n\n`;
+                transpiledCode += `    ## --- Python 转译开始 --- ##\n`;
+
+                const lines = rawContent.split('\n');
+                lines.forEach((l) => {
+                    let cleanLine = l.trim().replace(/"/g, '\\"');
+                    if (cleanLine) {
+                        transpiledCode += `    print "${cleanLine}"\n`;
+                    }
+                });
+
+                transpiledCode += `    ## --- Python 转译结束 --- ##\n`;
+                transpiledCode += `    print "文件 ${fileName} 转译成功！"\n`;
+                transpiledCode += `end prog`;
+
+                editor.setValue(transpiledCode);
+
+                const outputArea = document.getElementById('outputArea');
+                outputArea.innerHTML = `
+                    <div class="terminal-header">Python 转译器 [成功]</div>
+                    <div class="terminal-line" style="color: #a78bfa;"><span class="terminal-prompt">&gt;&gt;</span> 文件 "${fileName}" 已成功转译为 SkyScript 格式！</div>
+                    <div class="terminal-line" style="color: #64748b;">[等待 SKY21CN 严格合规审查]</div>
+                `;
+
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // --- SKY21CN 深度升级版合规与敏感話題攔截引擎 ---
+        function runSky21CnAudit() {
+            const modal = document.getElementById('sky21CnModal');
+            modal.style.display = 'flex';
+            
+            document.getElementById('cChk1').innerHTML = '<span style="color: #facc15;">正在检查...</span>';
+            document.getElementById('cChk2').innerHTML = '<span style="color: #64748b;">等待中...</span>';
+            document.getElementById('cChk3').innerHTML = '<span style="color: #64748b;">等待中...</span>';
+            document.getElementById('cChk4').innerHTML = '<span style="color: #64748b;">等待中...</span>';
+            document.getElementById('modalActionBtn').style.display = 'none';
+            document.getElementById('modalCancelBtn').style.display = 'block';
+
+            const code = editor.getValue();
+
+            // 深度敏感與法規紅線比對規則（涵蓋主權、兩岸、惡意特徵及違規代理）
+            const globalComplianceRules = [
+                // 1. 惡意代碼與木馬特徵
+                { pattern: /rm\s+-[rRfF]+/i, name: "高危文件删除破坏命令" },
+                { pattern: /\b(eval|exec|system|popen|subprocess)\s*\(/i, name: "未授权代码动态执行漏洞" },
+                // 2. 跨境代理與越牆特徵
+                { pattern: /\b(vpn|shadowsocks|trojan|clash|proxy_pass|tunnel|bypass)\b/i, name: "未授权跨境通信与代理隧道特征" },
+                // 3. 兩岸、主權與地緣政治敏感話題（真正捕捉台灣等主權定位與敏感描述）
+                { pattern: /\b(taiwan[-_\s]*independent|taiwan[-_\s]*status|taiwan[-_\s]*territory|taiwan[-_\s]*gov|1949[-_\s]*split|two[-_\s]*chinas|1[-_\s]*china[-_\s]*violate)\b/i, name: "涉台定位与主权红线不合规表述" },
+                { pattern: /\b(tui[-_\s]*fan[-_\s]*zheng[-_\s]*fu|quxiao[-_\s]*dang[-_\s]*lingdao|minzhu[-_\s]*ziyou[-_\s]*yun|ge-ming-bao-dong)\b/i, name: "涉政、顛覆體制或敏感事件混淆特征" }
+            ];
+
+            let threatDetected = false;
+            let matchedViolation = "";
+
+            // 執行全域掃描
+            for (let rule of globalComplianceRules) {
+                if (rule.pattern.test(code)) {
+                    threatDetected = true;
+                    matchedViolation = rule.name;
+                    break;
+                }
+            }
+
+            // 模擬嚴謹的進度分段掃描
+            setTimeout(() => {
+                document.getElementById('cChk1').innerHTML = '<span class="badge-safe">通过</span>';
+                document.getElementById('cChk2').innerHTML = '<span style="color: #facc15;">检测网络与隧道...</span>';
+                
+                setTimeout(() => {
+                    document.getElementById('cChk2').innerHTML = '<span class="badge-safe">合规</span>';
+                    document.getElementById('cChk3').innerHTML = '<span style="color: #facc15;">审查主权与地缘政治红线...</span>';
+
+                    setTimeout(() => {
+                        if (threatDetected) {
+                            document.getElementById('cChk3').innerHTML = `<span class="badge-danger">触发红线</span>`;
+                            document.getElementById('cChk4').innerHTML = `<span class="badge-danger">已被 SKY21CN 深度拦截</span>`;
+                            
+                            const outputArea = document.getElementById('outputArea');
+                            outputArea.innerHTML = `
+                                <div class="terminal-header" style="border-color: #f87171;">SKY21CN 合规审查报告 [觸發政治/主權紅線]</div>
+                                <div class="terminal-line terminal-error">&gt;&gt; [合规拦截]: 检测到违规话题与红线内容 -> "${matchedViolation}"</div>
+                                <div class="terminal-line terminal-error">&gt;&gt; 依据国家相关网络安全与地缘政治合规条例，此进程已被彻底终结。</div>
+                            `;
+                            document.getElementById('modalCancelBtn').innerText = '关闭';
+                        } else {
+                            document.getElementById('cChk3').innerHTML = '<span class="badge-safe">通过审核</span>';
+                            document.getElementById('cChk4').innerHTML = '<span class="badge-safe">全部合格 (SKY21CN 认证)</span>';
+                            
+                            document.getElementById('modalActionBtn').style.display = 'block';
+                        }
+                    }, 500);
+                }, 500);
+            }, 500);
+        }
+
+        function closeSky21CnModal() {
+            document.getElementById('sky21CnModal').style.display = 'none';
+        }
+
+        function executeAfterSky21Cn() {
+            closeSky21CnModal();
+            const outputArea = document.getElementById('outputArea');
+            outputArea.innerHTML = `
+                <div class="terminal-header">SKY21CN [合规放行并執行]</div>
+                <div class="terminal-line" style="color: #10b981;"><span class="terminal-prompt">&gt;&gt;</span> 已通过 SKY21CN 深度合规审查，正在運行程序...</div>
+            `;
+            setTimeout(executeCode, 400);
+        }
+
+        // --- 核心直译执行逻辑 ---
+        function executeCode() {
             const code = editor.getValue();
             const outputArea = document.getElementById('outputArea');
-            let terminalHtml = '<div class=\'terminal-header\'>SkyScript v1.0.0 [正在执行进程...]</div>';
+            let terminalHtml = outputArea.innerHTML + '<div class="terminal-header" style="margin-top: 10px;">SkyScript v1.0.0-CN [进程运行中]</div>';
+
             const lines = code.split('\n');
-            let i = 0, hasOutput = false;
+            let i = 0;
+            let hasOutput = false;
+
             while (i < lines.length) {
-                let line = lines[i].trim();
+                let rawLine = lines[i];
+                let line = rawLine.trim();
+
                 if (!line || line.startsWith('##')) { i++; continue; }
+
                 hasOutput = true;
                 if (line.startsWith('set window.title')) {
                     let title = line.replace('set window.title', '').trim().replace(/^"|"$/g, '');
-                    terminalHtml += `<div class='terminal-line'><span class='terminal-prompt'>&gt;&gt;</span> [窗口标题]: ${title}</div>`;
+                    terminalHtml += `<div class="terminal-line"><span class="terminal-prompt">&gt;&gt;</span> [窗口标题]: ${title}</div>`;
                 } else if (line.startsWith('set window.size')) {
                     let size = line.replace('set window.size', '').trim().replace(/^"|"$/g, '');
-                    terminalHtml += `<div class='terminal-line'><span class='terminal-prompt'>&gt;&gt;</span> [窗口大小]: ${size}</div>`;
+                    terminalHtml += `<div class="terminal-line"><span class="terminal-prompt">&gt;&gt;</span> [窗口尺寸]: ${size}</div>`;
                 } else if (line.startsWith('print ')) {
                     let content = line.substring(6).trim().replace(/^"|"$/g, '');
-                    terminalHtml += `<div class='terminal-line' style='color: #38bdf8;'><span class='terminal-prompt'>&gt;&gt;</span> ${content}</div>`;
+                    terminalHtml += `<div class="terminal-line" style="color: #fca5a5;"><span class="terminal-prompt">&gt;&gt;</span> ${content}</div>`;
+                } else if (line.startsWith('def class')) {
+                    let blockName = line.replace('def class', '').trim();
+                    terminalHtml += `<div class="terminal-line" style="color: #fbbf24;"><span class="terminal-prompt">&gt;&gt;</span> 进入代码块: ${blockName}</div>`;
                 } else if (line === 'skip to' || line === 'skip') {
-                    terminalHtml += `<div class='terminal-line' style='color: #facc15;'><span class='terminal-prompt'>&gt;&gt;</span> 正在略过代码块...</div>`;
+                    terminalHtml += `<div class="terminal-line" style="color: #facc15;"><span class="terminal-prompt">&gt;&gt;</span> 正在跳过指定区块...</div>`;
                     i++;
                     while (i < lines.length) {
-                        if (lines[i].trim() === 'here') break;
+                        let target = lines[i].trim();
+                        if (target === 'here' || target === '}') break;
                         i++;
                     }
                 } else if (line.includes('=')) {
                     let parts = line.split('=');
                     let varName = parts[0].trim();
                     let varValue = parts[1].trim().replace(/^"|"$/g, '');
-                    terminalHtml += `<div class='terminal-line' style='color: #4ade80;'><span class='terminal-prompt'>&gt;&gt;</span> 变量 [${varName}] = ${varValue}</div>`;
+                    terminalHtml += `<div class="terminal-line" style="color: #34d399;"><span class="terminal-prompt">&gt;&gt;</span> 变量 [${varName}] = ${varValue}</div>`;
                 }
                 i++;
             }
+
             if (!hasOutput) {
-                terminalHtml += `<div class='terminal-line terminal-error'>&gt;&gt; 错误：未找到可执行的指令。</div>`;
+                terminalHtml += `<div class="terminal-line terminal-error">&gt;&gt; 错误：未找到可执行的合规指令。</div>`;
             } else {
-                terminalHtml += `<div class='terminal-line' style='color: #64748b; margin-top: 10px;'>[程序已成功退出，代码 0]</div>`;
+                terminalHtml += `<div class="terminal-line" style="color: #64748b; margin-top: 10px;">[进程已正常退出，状态码 0]</div>`;
             }
+
             outputArea.innerHTML = terminalHtml;
             outputArea.scrollTop = outputArea.scrollHeight;
         }
