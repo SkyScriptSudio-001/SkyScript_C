@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>SkyScript 现代化 IDE</title>
-    <!-- 引入 CodeMirror 核心与深色高级主题 -->
+    <title>SkyScript Modern IDE - 大陆版 [SKY21CN 双轨安检 - 全语法高亮完整版]</title>
+    <!-- CodeMirror 核心与主题 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/ayu-dark.min.css">
     <style>
@@ -28,20 +28,20 @@
             padding: 16px 24px;
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
         
         .logo-area { display: flex; align-items: center; gap: 12px; }
-        .logo-dot { width: 12px; height: 12px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 12px #ef4444; }
+        .logo-dot { width: 12px; height: 12px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 12px #38bdf8; }
         h1 { font-size: 18px; font-weight: 600; color: #f8fafc; margin: 0; letter-spacing: 0.5px; }
         
         .header-actions { display: flex; gap: 10px; align-items: center; }
 
-        /* 高级按钮 */
+        /* 高级按钮与标签 */
         button, .file-btn {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             color: white;
             border: none;
             padding: 10px 18px;
@@ -50,7 +50,7 @@
             font-weight: 600;
             font-size: 14px;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -58,8 +58,8 @@
         }
         button:hover, .file-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.5);
-            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.5);
+            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
         }
         button:active, .file-btn:active { transform: translateY(0); }
 
@@ -68,24 +68,50 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .btn-secondary:hover {
-            background: linear-gradient(135deg, #475569 0%, #334155 100%);
-        }
+        .btn-secondary:hover { background: linear-gradient(135deg, #475569 0%, #334155 100%); }
 
         .btn-accent {
-            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
-        .btn-accent:hover {
-            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
-        }
+        .btn-accent:hover { background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); }
 
         .btn-success {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
-        .btn-success:hover {
-            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+        .btn-success:hover { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        .btn-danger:hover { background: linear-gradient(135deg, #dc2626 100%, #b91c1c 100%); }
+
+        .user-pill {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .strike-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
         }
         
         /* 双栏主容器 */
@@ -112,10 +138,10 @@
             font-weight: 600;
         }
         
-        /* CodeMirror 编辑器外观微调 */
+        /* CodeMirror 样式覆盖 */
         .CodeMirror {
             flex: 1;
-            height: auto !important;
+            height: 100% !important;
             border-radius: 10px;
             font-family: 'JetBrains Mono', Consolas, 'Courier New', Courier, monospace;
             font-size: 14px;
@@ -128,14 +154,16 @@
             border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
         }
         .CodeMirror-linenumber { color: #475569 !important; }
+
+        /* 自定义 SkyScript 全面高亮样式类 */
+        .cm-skyscript-comment { color: #64748b; font-style: italic; }
+        .cm-skyscript-string { color: #34d399; }
+        .cm-skyscript-keyword { color: #f472b6; font-weight: bold; }
+        .cm-skyscript-command { color: #38bdf8; font-weight: bold; }
+        .cm-skyscript-number { color: #fbbf24; }
+        .cm-skyscript-variable { color: #93c5fd; }
         
-        /* 语法高亮 Token 颜色 */
-        .cm-skyscript-keyword { color: #f87171; font-weight: bold; }
-        .cm-skyscript-command { color: #facc15; font-weight: bold; }
-        .cm-skyscript-string { color: #fca5a5; }
-        .cm-skyscript-comment { color: #6272a4; font-style: italic; }
-        
-        /* 专业级终端机输出视窗 */
+        /* 终端机输出视窗 */
         .terminal-box {
             flex: 1;
             background: #0d1322;
@@ -150,10 +178,10 @@
         }
         .terminal-header { color: #64748b; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); padding-bottom: 10px; margin-bottom: 12px; }
         .terminal-line { margin-bottom: 6px; white-space: pre-wrap; }
-        .terminal-prompt { color: #ef4444; margin-right: 6px; font-weight: bold; }
+        .terminal-prompt { color: #38bdf8; margin-right: 6px; font-weight: bold; }
         .terminal-error { color: #f87171; }
 
-        /* SKY21CN 严格合规審核彈窗 Modal 樣式 */
+        /* 通用 Modal 弹窗 */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -166,11 +194,11 @@
         }
         .modal-card {
             background: #131b2e;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(56, 189, 248, 0.2);
             border-radius: 20px;
             padding: 30px;
             width: 100%;
-            max-width: 540px;
+            max-width: 600px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
         .modal-card h3 { color: #f8fafc; margin-top: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; }
@@ -184,26 +212,74 @@
             font-size: 13px;
         }
         .scan-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .scan-item:last-child { margin-bottom: 0; }
         .badge-safe { color: #10b981; font-weight: bold; }
         .badge-danger { color: #f87171; font-weight: bold; }
         .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
+        .form-control {
+            width: 100%;
+            background: #0d1322;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #f8fafc;
+            font-size: 14px;
+        }
+        .form-control:focus { outline: none; border-color: #38bdf8; }
+        
+        .project-list { max-height: 250px; overflow-y: auto; margin-top: 10px; }
+        .project-item {
+            background: #0d1322;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .tab-switch { display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px; }
+        .tab-btn { background: none; border: none; color: #64748b; font-weight: 600; cursor: pointer; padding: 4px 8px; font-size: 14px; box-shadow: none; }
+        .tab-btn.active { color: #38bdf8; border-bottom: 2px solid #38bdf8; }
+        
+        .rules-box {
+            background: #0d1322;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13px;
+            line-height: 1.8;
+            color: #cbd5e1;
+        }
+        .rules-box ol { margin: 0; padding-left: 20px; }
+        .rules-box li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
     <header>
         <div class="logo-area">
             <div class="logo-dot"></div>
-            <h1>SkyScript 现代化 IDE [CN Edition - SKY21CN 深度合规升级]</h1>
+            <h1>SkyScript 大陆版 IDE [SKY21CN 双轨安检 - 全语法高亮完整版]</h1>
         </div>
         <div class="header-actions">
+            <div class="user-pill" onclick="openLoginModal()">
+                <span id="userAvatarDot" style="width: 8px; height: 8px; background: #f87171; border-radius: 50%;"></span>
+                <span id="userDisplayName">未登录</span>
+                <span id="strikeBadge" class="strike-badge" style="display:none;">0/5</span>
+            </div>
+
+            <button class="btn-secondary" onclick="openModal('rulesModal')">📜 守则</button>
+            <button id="devApplyBtn" class="btn-accent" style="display: none;" onclick="openDevApplyModal()">👨‍💻 申请开发者</button>
+            <button id="adminBtn" class="btn-admin" style="display: none;" onclick="openAdminModal()">👑 管理员后台</button>
+
             <input type="file" id="fileInput" style="display: none;" onchange="importFile(event)">
-            <input type="file" id="transpileInput" style="display: none;" onchange="transpileFile(event)">
             
-            <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">📁 打开文件</button>
-            <button class="btn-accent" onclick="document.getElementById('transpileInput').click()">⚡ 转译程序 (Python)</button>
-            <button class="btn-secondary" onclick="saveFile()">💾 保存代码</button>
-            <button class="btn-success" onclick="runSky21CnAudit()">▶ 运行程序</button>
+            <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">📁 打开</button>
+            <button class="btn-secondary" onclick="saveFile()">💾 本地</button>
+            <button class="btn-success" onclick="runSky21CNAudit()">▶ 运行代码</button>
         </div>
     </header>
 
@@ -211,63 +287,227 @@
         <div class="panel">
             <h2>代码编辑器</h2>
             <textarea id="codeArea">set prog
-    set window.title "SkyScript 合规测试环境"
+    set window.title "SkyScript 双轨合规版"
     set window.size "1200x800"
     
-    print "就绪：准备进行 SKY21CN 深度合规审查..."
+    ## 全语法高亮已解锁：关键字、命令, 变量, 字符串与数字全面着色
+    print "系统初始化完成 - SKY21CN 双轨安全合规引擎已升级"
     
-    def class TestBlock
-        print "运行常规逻辑"
+    def class DemoApp
+        status = "Active"
+        print status
     
-    print "测试完成"
+    print "执行完成！"
 end prog</textarea>
         </div>
         <div class="panel">
             <h2>终端机输出</h2>
             <div id="outputArea" class="terminal-box">
-                <div class="terminal-header">SkyScript v1.0.0-CN [准备就绪]</div>
-                <div class="terminal-line" style="color: #64748b;">点击“运行程序”将自动启动 SKY21CN 深度合规与内容安全引擎...</div>
+                <div class="terminal-header">SkyScript v1.0.0 [就绪]</div>
+                <div class="terminal-line" style="color: #64748b;">点击「运行代码」以启动 SKY21CN 审查引擎...</div>
             </div>
         </div>
     </div>
 
-    <!-- SKY21CN 严格审查弹窗 Modal -->
-    <div id="sky21CnModal" class="modal-overlay">
+    <!-- SKY21CN 规范审核 Modal -->
+   <!-- SKY21CN 規範審核 Modal -->
+<div id="skyCheckModal" class="modal-overlay">
+    <div class="modal-card">
+        <h3>🛡️ 安全合规审查引擎</h3>
+        
+        <div class="scan-status">
+                <div class="scan-item"><span>審核作品中:</span> <span id="sChk1" style="color: #64748b;">等待中...</span></div>
+                <div class="scan-item"><span>審核作品中:</span> <span id="sChk2" style="color: #64748b;">等待中...</span></div>
+                <div class="scan-item"><span>審核作品中:</span> <span id="sChk3" style="color: #64748b;">等待中...</span></div>
+            </div>
+
+        <div class="modal-actions">
+            <button id="modalCancelBtn" class="btn-secondary" onclick="closeModal('skyCheckModal')">取消</button>
+            <button id="modalActionBtn" class="btn-success" style="display: none;" onclick="executeAfterSkyCheck()">授权并执行</button>
+            <button id="appealBtn" class="btn-accent" style="display: none;" onclick="openAppealModal()">提交申诉</button>
+        </div>
+    </div>
+</div>
+
+    <!-- 守则 Modal -->
+    <div id="rulesModal" class="modal-overlay">
         <div class="modal-card">
-            <h3>🇨🇳 SKY21CN 深度内容安全与地缘政治合规引擎</h3>
-            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 12px;">正在执行多维恶意特征比对、模糊拼音规避拦截以及地缘政治与敏感话题深度审查...</p>
-            
-            <div class="scan-status" id="scanStatusBox">
-                <div class="scan-item"><span>[1/4] 代码结构与恶意特征扫描:</span> <span id="cChk1" style="color: #64748b;">等待中...</span></div>
-                <div class="scan-item"><span>[2/4] 跨网络代理与越墙隧道检测:</span> <span id="cChk2" style="color: #64748b;">等待中...</span></div>
-                <div class="scan-item"><span>[3/4] 涉台、主权及地緣政治红线审查:</span> <span id="cChk3" style="color: #64748b;">等待中...</span></div>
-                <div class="scan-item"><span>[4/4] SKY21CN 最终合规裁决:</span> <span id="cChk4" style="color: #64748b;">等待中...</span></div>
+            <h3>📜 SkyScript 使用规定</h3>
+            <div class="rules-box">
+                <ol>
+                    <li><b>禁止编写恶意程序</b>：包括木马、漏洞利用或破坏系统程序。</li>
+                    <li><b>严格遵守中国法律与港澳国安法</b>：全面适用《网络安全法》、《中华人民共和国刑法》及《香港国安法》，严禁包含任何政治敏感、颠覆国家、分裂国家、恐怖主义或违规言论。</li>
+                    <li><b>禁止人身攻击与网络霸凌</b>。</li>
+                </ol>
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 12px 0;">
+                <p style="color: #f87171; margin: 0;">⚠️ <b>停权警告</b>：普通用户违规超过 <b>5 次</b> 将自动停权。<b>开发者与管理员享有免停权豁免特权</b>（违规代码照常拦截，且所有拦截记录将自动上报至 ADMIN001 管理员后台）。</p>
             </div>
-
             <div class="modal-actions">
-                <button id="modalCancelBtn" class="btn-secondary" onclick="closeSky21CnModal()">取消</button>
-                <button id="modalActionBtn" class="btn-success" style="display: none;" onclick="executeAfterSky21Cn()">通过审查并执行</button>
+                <button class="btn-secondary" onclick="closeModal('rulesModal')">了解</button>
             </div>
         </div>
     </div>
 
-    <!-- 引入 CodeMirror 核心指令码 -->
+    <!-- 开发者申请 Modal -->
+    <div id="devApplyModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>👨‍💻 申请成为程序开发者</h3>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 14px;">批准后即可享有<b>免停权特权</b>（触发拦截仍会上报管理员）！</p>
+            <div class="form-group">
+                <label>申请说明 / 备注</label>
+                <textarea id="devApplyReason" class="form-control" rows="3" placeholder="请简述您的开发需求..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-success" onclick="submitDevApplication()">提交申请</button>
+                <button class="btn-secondary" onclick="closeModal('devApplyModal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理员后台 Modal -->
+    <div id="adminModal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 650px;">
+            <h3>👑 管理员控制与审核后台</h3>
+            
+            <div class="tab-switch" style="margin-top: 10px;">
+                <button class="tab-btn active" id="tabAdminApp" onclick="switchAdminTab('app')">开发者申请审核</button>
+                <button class="tab-btn" id="tabAdminLogs" onclick="switchAdminTab('logs')">拦截上报日志 (ADMIN001)</button>
+                <button class="tab-btn" id="tabAdminUser" onclick="switchAdminTab('user')">全站用户与停权管理</button>
+            </div>
+
+            <div id="adminAppSection">
+                <div class="project-list" id="adminPendingList"></div>
+            </div>
+
+            <div id="adminLogsSection" style="display: none;">
+                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">包含所有用户（含开发者）触发合规拦截之上报记录：</div>
+                <div class="project-list" id="adminLogsList"></div>
+            </div>
+
+            <div id="adminUserSection" style="display: none;">
+                <div class="project-list" id="adminAllUsersList"></div>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button class="btn-secondary" onclick="closeModal('adminModal')">关闭后台</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 账号登录与注册 Modal -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="tab-switch">
+                <button class="tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">登录账号</button>
+                <button class="tab-btn" id="tabRegisterBtn" onclick="switchAuthTab('register')">注册新账号</button>
+            </div>
+
+            <div id="loginSection">
+                <h3>🔐 用户登录</h3>
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="loginUser" class="form-control" placeholder="请输入您的用户名">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="loginPass" class="form-control" placeholder="请输入密码">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-success" onclick="handleLogin()">登录</button>
+                    <button class="btn-secondary" onclick="closeModal('loginModal')">取消</button>
+                </div>
+            </div>
+
+            <div id="registerSection" style="display: none;">
+                <h3>📝 注册账号</h3>
+                <div class="form-group">
+                    <label>设定用户名</label>
+                    <input type="text" id="regUser" class="form-control" placeholder="设定用户名">
+                </div>
+                <div class="form-group">
+                    <label>设定密码</label>
+                    <input type="password" id="regPass" class="form-control" placeholder="设定密码">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-accent" onclick="handleRegister()">注册并登录</button>
+                    <button class="btn-secondary" onclick="closeModal('loginModal')">取消</button>
+                </div>
+            </div>
+
+            <div id="loggedInProfileSection" style="display: none;">
+                <h3>👤 账号个人资料</h3>
+                <div class="form-group" style="margin-top: 10px;">
+                    <div id="profileDetails" style="padding: 12px; background: #0d1322; border-radius: 8px; font-size: 13px; color: #38bdf8; line-height: 1.6;"></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" style="background: #ef4444;" onclick="logoutAccount()">登出</button>
+                    <button class="btn-secondary" onclick="closeModal('loginModal')">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 申诉 Modal -->
+    <div id="appealModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>✉️ 向管理员提交申诉</h3>
+            <div class="form-group">
+                <label>申诉说明</label>
+                <textarea id="appealMsg" class="form-control" rows="3" placeholder="请解释原因..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-accent" onclick="submitAppeal()">发送申诉</button>
+                <button class="btn-secondary" onclick="closeModal('appealModal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CodeMirror 核心脚本 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
     <script>
+        // 定义完整的 SkyScript 语法高亮模式（全字段高亮覆盖）
         CodeMirror.defineMode('skyscript', function() {
             return {
                 token: function(stream) {
                     if (stream.eatSpace()) return null;
-                    if (stream.match(/^##.*/)) { stream.skipToEnd(); return 'skyscript-comment'; }
-                    if (stream.match(/^"[^"]*"/)) { return 'skyscript-string'; }
-                    if (stream.match(/\bwindow\.(title|size)\b/)) { return 'skyscript-command'; }
-                    if (stream.match(/\b(set prog|end prog|set|def class|skip to|skip|here|print)\b/)) { return 'skyscript-keyword'; }
+
+                    // 1. 注释 (Comments)
+                    if (stream.match(/^##.*/)) {
+                        stream.skipToEnd();
+                        return 'skyscript-comment';
+                    }
+
+                    // 2. 字符串 (Strings - 支持双引号与单引号)
+                    if (stream.match(/^"[^"]*"/)) return 'skyscript-string';
+                    if (stream.match(/^'[^']*'/)) return 'skyscript-string';
+
+                    // 3. 关键字 (Keywords)
+                    if (stream.match(/\b(set prog|end prog|def class|set|print|skip to|skip|here|if|else|return)\b/)) {
+                        return 'skyscript-keyword';
+                    }
+
+                    // 4. 内建命令与属性 (Commands & Properties)
+                    if (stream.match(/\b(window\.title|window\.size|status)\b/)) {
+                        return 'skyscript-command';
+                    }
+
+                    // 5. 数字 (Numbers)
+                    if (stream.match(/^\d+(\.\d+)?\b/)) {
+                        return 'skyscript-number';
+                    }
+
+                    // 6. 变量与识别字 (Identifiers / Variables)
+                    if (stream.match(/^[a-zA-Z_][a-zA-Z0-9_]*/)) {
+                        return 'skyscript-variable';
+                    }
+
                     stream.next();
                     return null;
                 }
             };
         });
 
+        // 初始化 CodeMirror 编辑器并套用 ayu-dark 主题
         var editor = CodeMirror.fromTextArea(document.getElementById('codeArea'), {
             lineNumbers: true,
             theme: 'ayu-dark',
@@ -277,210 +517,750 @@ end prog</textarea>
             lineWrapping: true
         });
 
-        function saveFile() {
+        let usersDb = JSON.parse(localStorage.getItem('skyscript_users_db')) || {};
+        if (!usersDb['ADMIN001']) {
+            usersDb['ADMIN001'] = { password: 'adminpassword', uuid: 'usr_admin_001', violations: 0, isBanned: false, isDev: true };
+            localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+        }
+
+        let currentUser = JSON.parse(localStorage.getItem('skyscript_user')) || null;
+
+        function updateUIAuth() {
+            const dot = document.getElementById('userAvatarDot');
+            const nameEl = document.getElementById('userDisplayName');
+            const strikeBadge = document.getElementById('strikeBadge');
+            const adminBtn = document.getElementById('adminBtn');
+            const devApplyBtn = document.getElementById('devApplyBtn');
+
+            if (currentUser) {
+                let dbData = usersDb[currentUser.username] || { violations: 0, isBanned: false, isDev: false };
+                nameEl.innerText = currentUser.username;
+                strikeBadge.style.display = 'inline-block';
+
+                if (currentUser.username === 'ADMIN001' || dbData.isDev) {
+                    strikeBadge.innerText = 'DEV / ADMIN (免封)';
+                    dot.style.background = '#10b981';
+                } else if (dbData.isBanned) {
+                    dot.style.background = '#ef4444';
+                    strikeBadge.innerText = '已停权';
+                } else {
+                    dot.style.background = '#38bdf8';
+                    strikeBadge.innerText = `${dbData.violations || 0}/5`;
+                }
+
+                if (currentUser.username === 'ADMIN001') {
+                    adminBtn.style.display = 'inline-flex';
+                    devApplyBtn.style.display = 'none';
+                } else {
+                    adminBtn.style.display = 'none';
+                    devApplyBtn.style.display = 'inline-flex';
+                }
+            } else {
+                dot.style.background = '#f87171';
+                nameEl.innerText = '未登录';
+                strikeBadge.style.display = 'none';
+                adminBtn.style.display = 'none';
+                devApplyBtn.style.display = 'none';
+            }
+        }
+        updateUIAuth();
+
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function openLoginModal() {
+            const loginSec = document.getElementById('loginSection');
+            const regSec = document.getElementById('registerSection');
+            const profileSec = document.getElementById('loggedInProfileSection');
+            const tabLogin = document.getElementById('tabLoginBtn');
+
+            if (currentUser) {
+                loginSec.style.display = 'none';
+                regSec.style.display = 'none';
+                tabLogin.parentElement.style.display = 'none';
+                profileSec.style.display = 'block';
+
+                let dbData = usersDb[currentUser.username] || {};
+                let isAdmin = currentUser.username === 'ADMIN001';
+                let isDev = dbData.isDev || isAdmin;
+                document.getElementById('profileDetails').innerHTML = `
+                    用户名: <b>${currentUser.username}</b> ${isAdmin ? '<span style="color: #f59e0b;">(管理员)</span>' : ''}<br>
+                    身份: <b style="color: ${isDev ? '#10b981' : '#38bdf8'}">${isDev ? '程序开发者 / 特权账号' : '普通用户'}</b><br>
+                    违规计次: <b>${isDev ? '免计次 / 免停权 (拦截仍上报 ADMIN)' : (dbData.violations || 0) + ' / 5 次'}</b><br>
+                    账号状态: <b style="color: ${dbData.isBanned ? '#ef4444' : '#10b981'}">${dbData.isBanned ? '已停权' : '正常'}</b>
+                `;
+            } else {
+                tabLogin.parentElement.style.display = 'flex';
+                switchAuthTab('login');
+            }
+            openModal('loginModal');
+        }
+
+        function switchAuthTab(tab) {
+            const loginSec = document.getElementById('loginSection');
+            const regSec = document.getElementById('registerSection');
+            const profileSec = document.getElementById('loggedInProfileSection');
+            const tabLogin = document.getElementById('tabLoginBtn');
+            const tabReg = document.getElementById('tabRegisterBtn');
+
+            profileSec.style.display = 'none';
+            if (tab === 'login') {
+                loginSec.style.display = 'block';
+                regSec.style.display = 'none';
+                tabLogin.classList.add('active');
+                tabReg.classList.remove('active');
+            } else {
+                loginSec.style.display = 'none';
+                regSec.style.display = 'block';
+                tabReg.classList.add('active');
+                tabLogin.classList.remove('active');
+            }
+        }
+
+        function handleRegister() {
+            const user = document.getElementById('regUser').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+
+            if (!user || !pass) { alert('请填写用户名与密码！'); return; }
+            if (usersDb[user]) { alert('用户名已存在！'); return; }
+
+            const uuid = 'usr_' + Math.random().toString(36).substring(2, 10);
+            usersDb[user] = { password: pass, uuid: uuid, violations: 0, isBanned: false, isDev: false };
+            localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+
+            currentUser = { username: user, uuid: uuid };
+            localStorage.setItem('skyscript_user', JSON.stringify(currentUser));
+
+            updateUIAuth();
+            alert('注册成功！');
+            closeModal('loginModal');
+        }
+
+        function handleLogin() {
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if (!usersDb[user] || usersDb[user].password !== pass) {
+                alert('用户名或密码错误！');
+                return;
+            }
+
+            if (usersDb[user].isBanned) {
+                alert('您的账号已被管理员停权，无法登录！');
+                return;
+            }
+
+            currentUser = { username: user, uuid: usersDb[user].uuid };
+            localStorage.setItem('skyscript_user', JSON.stringify(currentUser));
+
+            updateUIAuth();
+            alert(`已成功登录 ${user}！`);
+            closeModal('loginModal');
+        }
+
+        function logoutAccount() {
+            currentUser = null;
+            localStorage.removeItem('skyscript_user');
+            updateUIAuth();
+            closeModal('loginModal');
+        }
+
+        function openDevApplyModal() {
+            if (!currentUser) { alert('请先登录账号！'); openLoginModal(); return; }
+            openModal('devApplyModal');
+        }
+
+        function submitDevApplication() {
+            const reason = document.getElementById('devApplyReason').value.trim();
+            let apps = JSON.parse(localStorage.getItem('skyscript_dev_applications')) || {};
+            
+            apps[currentUser.username] = {
+                username: currentUser.username,
+                reason: reason || '申请成为程序开发者',
+                status: 'pending',
+                time: new Date().toLocaleString()
+            };
+            localStorage.setItem('skyscript_dev_applications', JSON.stringify(apps));
+            alert('申请已成功提交给管理员！');
+            closeModal('devApplyModal');
+        }
+
+        function openAdminModal() {
+            if (!currentUser || currentUser.username !== 'ADMIN001') {
+                alert('权限不足！必须以管理员账号登录。');
+                return;
+            }
+            switchAdminTab('app');
+            openModal('adminModal');
+        }
+
+        function switchAdminTab(type) {
+            const tabApp = document.getElementById('tabAdminApp');
+            const tabLogs = document.getElementById('tabAdminLogs');
+            const tabUser = document.getElementById('tabAdminUser');
+            const secApp = document.getElementById('adminAppSection');
+            const secLogs = document.getElementById('adminLogsSection');
+            const secUser = document.getElementById('adminUserSection');
+
+            tabApp.classList.remove('active');
+            tabLogs.classList.remove('active');
+            tabUser.classList.remove('active');
+            secApp.style.display = 'none';
+            secLogs.style.display = 'none';
+            secUser.style.display = 'none';
+
+            if (type === 'app') {
+                tabApp.classList.add('active');
+                secApp.style.display = 'block';
+                renderAdminPendingList();
+            } else if (type === 'logs') {
+                tabLogs.classList.add('active');
+                secLogs.style.display = 'block';
+                renderAdminLogsList();
+            } else {
+                tabUser.classList.add('active');
+                secUser.style.display = 'block';
+                renderAdminUsersList();
+            }
+        }
+
+        function renderAdminPendingList() {
+            const container = document.getElementById('adminPendingList');
+            container.innerHTML = '';
+
+            let apps = JSON.parse(localStorage.getItem('skyscript_dev_applications')) || {};
+            const keys = Object.keys(apps).filter(k => apps[k].status === 'pending');
+
+            if (keys.length === 0) {
+                container.innerHTML = '<div style="color: #64748b; font-size: 13px; text-align: center; padding: 10px;">目前没有待审核的开发者申请。</div>';
+                return;
+            }
+
+            keys.forEach(username => {
+                let app = apps[username];
+                const item = document.createElement('div');
+                item.className = 'project-item';
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: 600; color: #f8fafc; font-size: 14px;">申请人: ${username}</div>
+                        <div style="font-size: 12px; color: #94a3b8;">备注: ${app.reason}</div>
+                        <div style="font-size: 11px; color: #64748b;">时间: ${app.time}</div>
+                    </div>
+                    <button class="btn-success" style="padding: 6px 14px; font-size: 12px;" onclick="approveDeveloper('${username}')">批准特权</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderAdminLogsList() {
+            const container = document.getElementById('adminLogsList');
+            container.innerHTML = '';
+
+            let logs = JSON.parse(localStorage.getItem('skyscript_intercept_logs')) || [];
+
+            if (logs.length === 0) {
+                container.innerHTML = '<div style="color: #64748b; font-size: 13px; text-align: center; padding: 10px;">暂无任何合规拦截上报记录。</div>';
+                return;
+            }
+
+            logs.reverse().forEach((log, index) => {
+                const item = document.createElement('div');
+                item.className = 'project-item';
+                item.innerHTML = `
+                    <div style="width: 100%;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 600; color: #f87171; font-size: 13px;">[拦截上报] 用户: ${log.username} (${log.role})</span>
+                            <span style="font-size: 11px; color: #64748b;">${log.time}</span>
+                        </div>
+                        <div style="font-size: 12px; color: #cbd5e1; margin-bottom: 4px;">原因: ${log.violationMsg}</div>
+                        <div style="font-size: 11px; background: #0b0f19; padding: 6px; border-radius: 4px; color: #94a3b8; font-family: monospace; white-space: pre-wrap; max-height: 60px; overflow-y: auto;">代码片段: ${log.codeSnippet}</div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function approveDeveloper(targetUser) {
+            let apps = JSON.parse(localStorage.getItem('skyscript_dev_applications')) || {};
+            if (apps[targetUser]) {
+                apps[targetUser].status = 'approved';
+                localStorage.setItem('skyscript_dev_applications', JSON.stringify(apps));
+
+                if (usersDb[targetUser]) {
+                    usersDb[targetUser].isDev = true;
+                    usersDb[targetUser].violations = 0;
+                    localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+                }
+
+                alert(`已成功批准 ${targetUser} 成为程序开发者！`);
+                renderAdminPendingList();
+            }
+        }
+
+        function renderAdminUsersList() {
+            const container = document.getElementById('adminAllUsersList');
+            container.innerHTML = '';
+
+            const usernames = Object.keys(usersDb);
+            usernames.forEach(username => {
+                let uData = usersDb[username];
+                let isAdmin = (username === 'ADMIN001');
+
+                const item = document.createElement('div');
+                item.className = 'project-item';
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: 600; color: #f8fafc; font-size: 14px;">
+                            ${username} ${isAdmin ? '<span style="color: #f59e0b;">(管理员)</span>' : ''}
+                        </div>
+                        <div style="font-size: 12px; color: #94a3b8;">
+                            身份: <span style="color: ${uData.isDev ? '#10b981' : '#38bdf8'}">${uData.isDev ? '开发者/免封' : '普通用户'}</span> | 
+                            违规计次: <b>${uData.violations || 0}/5</b> | 
+                            状态: <span style="color: ${uData.isBanned ? '#ef4444' : '#10b981'}">${uData.isBanned ? '已停权' : '正常'}</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        ${!isAdmin ? `
+                            ${uData.isDev ? `<button class="btn-secondary" style="background:#d97706; padding: 6px 10px; font-size: 11px;" onclick="toggleDevStatus('${username}', false)">取消开发者</button>` : ''}
+                            <button class="${uData.isBanned ? 'btn-success' : 'btn-danger'}" style="padding: 6px 10px; font-size: 11px;" onclick="toggleUserBan('${username}')">
+                                ${uData.isBanned ? '解除停权' : '停权账号'}
+                            </button>
+                        ` : '<span style="color:#64748b; font-size:12px;">核心管理</span>'}
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function toggleUserBan(username) {
+            if (username === 'ADMIN001') return;
+            if (usersDb[username]) {
+                usersDb[username].isBanned = !usersDb[username].isBanned;
+                localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+                renderAdminUsersList();
+            }
+        }
+
+        function toggleDevStatus(username, makeDev) {
+            if (username === 'ADMIN001') return;
+            if (usersDb[username]) {
+                usersDb[username].isDev = makeDev;
+                localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+                renderAdminUsersList();
+            }
+        }
+
+    
+// --- 确保必定生效的完整审查与拦截逻辑 ---
+// --- 终极确保拦截的审查与拦截逻辑 ---
+function runSky21CNAudit() {
+    if (!currentUser) {
+        alert('请先登录账号后再执行代码。');
+        openLoginModal();
+        return;
+    }
+
+    let dbData = usersDb[currentUser.username] || { violations: 0, isBanned: false, isDev: false };
+    if (dbData.isBanned) {
+        alert('您的账号已被停权，无法执行代码！');
+        return;
+    }
+
+    // 防绕过检测
+    if (typeof verifyAuditIntegrity === 'function' && !verifyAuditIntegrity()) {
+        usersDb[currentUser.username].isBanned = true;
+        usersDb[currentUser.username].violations = 5;
+        localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+        alert('检测到违规绕过安检行为！账号已被立即停权！');
+        location.reload();
+        return;
+    }
+
+    openModal('skyCheckModal');
+    document.getElementById('sChk1').innerHTML = '<span style="color: #facc15;">审核作品中...</span>';
+    document.getElementById('sChk2').innerHTML = '<span style="color: #facc15;">审核作品中...</span>';
+    document.getElementById('sChk3').innerHTML = '<span style="color: #facc15;">审核作品中...</span>';
+    document.getElementById('modalActionBtn').style.display = 'none';
+    document.getElementById('appealBtn').style.display = 'none';
+    document.getElementById('modalCancelBtn').style.display = 'block';
+
+    const code = typeof editor !== 'undefined' ? editor.getValue() : '';
+    let normalizedCode = code.toLowerCase().replace(/[\s\-_*\/|.,~#@!$%^&()+=\[\]{};:'"\\<>?]+/g, '');
+    
+    // 【请在此处自由添加您想要拦截的违规字词】
+    const threatPatterns = [
+        /(颠[^\w\s]?覆|分[^\w\s]?裂|国[^\w\s]?安[^\w\s]?法|网[^\w\s]?安[^\w\s]?法|恐怖襲擊|暴动|游行|示威|邪教|台独|港独|藏独|dg|df|gm)/i,
+        /(r[^\w\s]?m[^\w\s]?-[rRfF]+|t[^\w\s]?r[^\w\s]?o[^\w\s]?j[^\w\s]?a[^\w\s]?n|后[^\w\s]?门|木[^\w\s]?马)/i,
+        // 範例：如果您剛剛測試的是某些特定詞，可以直接加在下方（用 | 隔開）
+        /(违规|测试敏感词|badword)/i 
+    ];
+
+    let violationFound = false;
+    let violationMsg = "SKY21CN 拦截：检测到违规或敏感内容";
+
+    for (let p of threatPatterns) {
+        if (p.test(code) || p.test(normalizedCode)) {
+            violationFound = true;
+            break;
+        }
+    }
+
+    setTimeout(() => {
+        if (violationFound) {
+            let isPrivileged = (currentUser.username === 'ADMIN001' || dbData.isDev);
+
+            let interceptLogs = JSON.parse(localStorage.getItem('skyscript_intercept_logs')) || [];
+            interceptLogs.push({
+                username: currentUser.username,
+                role: currentUser.username === 'ADMIN001' ? '管理员' : (dbData.isDev ? '程序开发者' : '普通用户'),
+                violationMsg: violationMsg,
+                codeSnippet: code.substring(0, 100),
+                time: new Date().toLocaleString()
+            });
+            localStorage.setItem('skyscript_intercept_logs', JSON.stringify(interceptLogs));
+
+            if (!isPrivileged) {
+                usersDb[currentUser.username].violations = (usersDb[currentUser.username].violations || 0) + 1;
+                if (usersDb[currentUser.username].violations >= 5) usersDb[currentUser.username].isBanned = true;
+                localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+                updateUIAuth();
+            }
+
+            document.getElementById('sChk1').innerHTML = '<span class="badge-danger">未通过</span>';
+            document.getElementById('sChk2').innerHTML = '<span class="badge-danger">未通过</span>';
+            document.getElementById('sChk3').innerHTML = '<span class="badge-danger">已被拦截</span>';
+            
+            document.getElementById('outputArea').innerHTML = `
+                <div class="terminal-header" style="border-color: #f87171;">系统提示</div>
+                <div class="terminal-line terminal-error">&gt;&gt; 审核作品中：作品未能通过合规审查。</div>
+            `;
+            document.getElementById('appealBtn').style.display = 'block';
+        } else {
+            document.getElementById('sChk1').innerHTML = '<span class="badge-safe">通过</span>';
+            document.getElementById('sChk2').innerHTML = '<span class="badge-safe">通过</span>';
+            document.getElementById('sChk3').innerHTML = '<span class="badge-safe">通过</span>';
+            document.getElementById('modalActionBtn').style.display = 'block';
+        }
+    }, 400);
+}
+
+    
+        function executeAfterSkyCheck() {
+            closeModal('skyCheckModal');
+            executeCode();
+        }
+
+        function executeCode() {
             const code = editor.getValue();
-            const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+            const outputArea = document.getElementById('outputArea');
+            let terminalHtml = `<div class="terminal-header">SkyScript 执行输出</div>`;
+
+            const lines = code.split('\n');
+            lines.forEach(line => {
+                let l = line.pattern ? '' : line.trim();
+                if (!l || l.startsWith('##')) return;
+                if (l.startsWith('print ')) {
+                    let content = l.substring(6).trim().replace(/^"|"$/g, '');
+                    terminalHtml += `<div class="terminal-line" style="color: #38bdf8;"><span class="terminal-prompt">&gt;&gt;</span> ${content}</div>`;
+                } else if (l.includes('=')) {
+                    let parts = l.split('=');
+                    terminalHtml += `<div class="terminal-line" style="color: #4ade80;"><span class="terminal-prompt">&gt;&gt;</span> 变量 [${parts[0].trim()}] = ${parts[1].trim().replace(/^"|"$/g, '')}</div>`;
+                }
+            });
+
+            terminalHtml += `<div class="terminal-line" style="color: #64748b; margin-top: 10px;">[执行完毕，代码符合 SKY21CN 双轨合规规范]</div>`;
+            outputArea.innerHTML = terminalHtml;
+        }
+
+        function saveFile() {
+            const blob = new Blob([editor.getValue()], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'script_cn.sky';
-            document.body.appendChild(a);
+            a.href = url; a.download = 'script.sky';
             a.click();
-            document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
 
         function importFile(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
-            reader.onload = function(e) {
-                editor.setValue(e.target.result);
-                event.target.value = '';
-            };
+            reader.onload = function(e) { editor.setValue(e.target.result); };
             reader.readAsText(file);
         }
 
-        function transpileFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        function submitAppeal() {
+            const msg = document.getElementById('appealMsg').value.trim();
+            if (!msg) { alert('请输入申诉内容。'); return; }
+            alert('申诉已成功发送给管理员。');
+            closeModal('appealModal');
+        }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const rawContent = e.target.result;
-                const fileName = file.name;
+        // --- 防绕过与反篡改安检核心函数 ---
+function verifyAuditIntegrity() {
+    // 检查是否有篡改痕迹或直接跳过安检的非法调用
+    const securitySeal = document.getElementById('skyCheckModal');
+    if (!securitySeal || window.isSecureContext === false) {
+        return false;
+    }
+    return true;
+}
 
-                let transpiledCode = `set prog\n`;
-                transpiledCode += `    set window.title "从 ${fileName} 转译 (SKY21CN)"\n`;
-                transpiledCode += `    set window.size "1200x800"\n\n`;
-                transpiledCode += `    ## --- Python 转译开始 --- ##\n`;
+// --- 第二个防绕过功能：函数完整性与原型防篡改校验 ---
+function verifyFunctionIntegrity() {
+    try {
+        // 检查核心安检函数是否被 toString 篡改或劫持
+        const funcStr = runSky21CNAudit.toString();
+        if (funcStr.includes('[native code]') || !funcStr.includes('skyCheckModal')) {
+            return false;
+        }
+        
+        // 检查全局关键对象是否被冻结或非法修改
+        if (typeof window.runSky21CNAudit !== 'function') {
+            return false;
+        }
+        
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
-                const lines = rawContent.split('\n');
-                lines.forEach((l) => {
-                    let cleanLine = l.trim().replace(/"/g, '\\"');
-                    if (cleanLine) {
-                        transpiledCode += `    print "${cleanLine}"\n`;
-                    }
+// 建议在定时器或每次点击运行前调用此双重保险
+setInterval(() => {
+    if (currentUser && !usersDb[currentUser.username]?.isBanned) {
+        if (!verifyFunctionIntegrity()) {
+            usersDb[currentUser.username].isBanned = true;
+            usersDb[currentUser.username].violations = 5;
+            localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+
+            let interceptLogs = JSON.parse(localStorage.getItem('skyscript_intercept_logs')) || [];
+            interceptLogs.push({
+                username: currentUser.username,
+                role: currentUser.username === 'ADMIN001' ? '管理员' : '违规尝试者',
+                violationMsg: "【严重违规】检测到内存中核心安检函数被劫持或篡改",
+                codeSnippet: "[Function Hook / Prototype Tampering]",
+                time: new Date().toLocaleString()
+            });
+            localStorage.setItem('skyscript_intercept_logs', JSON.stringify(interceptLogs));
+
+            alert('【SKY21CN 核心安全警告】检测到内存函数遭非法篡改！账号已被立即停权并上报 ADMIN！');
+            location.reload();
+        }
+    }
+}, 2000);
+
+// 覆写并增强版 runSky21CNAudit：增加防绕过与违规立即停权机制
+function runSky21CNAudit() {
+    if (!currentUser) {
+        alert('请先登录账号后再执行代码。');
+        openLoginModal();
+        return;
+    }
+
+    let dbData = usersDb[currentUser.username] || { violations: 0, isBanned: false, isDev: false };
+
+    if (dbData.isBanned) {
+        alert('您的账号已被停权，无法执行代码！');
+        return;
+    }
+
+    // [防绕过核心检测]：若发现前端校验环节被篡改、跳过或强行移除弹窗
+    if (!verifyAuditIntegrity()) {
+        usersDb[currentUser.username].isBanned = true;
+        usersDb[currentUser.username].violations = 5;
+        localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+        
+        // 记录防绕过违规日志上报 ADMIN001
+        let interceptLogs = JSON.parse(localStorage.getItem('skyscript_intercept_logs')) || [];
+        interceptLogs.push({
+            username: currentUser.username,
+            role: currentUser.username === 'ADMIN001' ? '管理员' : '违规尝试者',
+            violationMsg: "【严重违规】检测到尝试绕过 SKY21CN 核心审查系统",
+            codeSnippet: "[非法篡改/绕过前端安检行为]",
+            time: new Date().toLocaleString()
+        });
+        localStorage.setItem('skyscript_intercept_logs', JSON.stringify(interceptLogs));
+
+        alert('【SKY21CN 安全警告】检测到违规绕过安检行为！您的账号已被系统立即停权！');
+        updateUIAuth();
+        location.reload();
+        return;
+    }
+
+    openModal('skyCheckModal');
+    document.getElementById('sChk1').innerHTML = '<span style="color: #facc15;">扫描中...</span>';
+    document.getElementById('sChk2').innerHTML = '<span style="color: #64748b;">等待中...</span>';
+    document.getElementById('sChk3').innerHTML = '<span style="color: #64748b;">等待中...</span>';
+    document.getElementById('modalActionBtn').style.display = 'none';
+    document.getElementById('appealBtn').style.display = 'none';
+    document.getElementById('modalCancelBtn').style.display = 'block';
+
+    const code = editor.getValue();
+    
+    const securityThreats = [
+        { pattern: /rm\s+-[rRfF]+/i, msg: "SKY21CN 拦截：检测到恶意删除文件木马指令" },
+        { pattern: / (trojan|backdoor|keylogger|exploit|malware|病毒|木马|后门) /i, msg: "SKY21CN 拦截：检测到系统入侵 / 恶意程序关键字" },
+        { pattern: /(政治|敏感词|国安法|煽动|颠覆|网安法|违法|违宪|独立|反动|暴动|游行|示威|邪教|法轮功|台独|港独|藏独|分裂国家|恐怖活动|勾结外部势力|颠覆国家政权)/i, msg: "SKY21CN 拦截：依据中国网络安全法、中华人民共和国刑法及港澳地区国安法，检测到违规政治、分裂或敏感字汇" }
+    ];
+
+    let violationFound = false;
+    let violationMsg = "";
+    for (let t of securityThreats) {
+        if (t.pattern.test(code)) { violationFound = true; violationMsg = t.msg; break; }
+    }
+
+    setTimeout(() => {
+        document.getElementById('sChk1').innerHTML = '<span class="badge-safe">通过</span>';
+        document.getElementById('sChk2').innerHTML = '<span class="badge-safe">通过</span>';
+        document.getElementById('sChk3').innerHTML = '<span class="badge-safe">通过</span>';
+
+        setTimeout(() => {
+            if (violationFound) {
+                let isPrivileged = (currentUser.username === 'ADMIN001' || dbData.isDev);
+                let roleName = currentUser.username === 'ADMIN001' ? '管理员' : (dbData.isDev ? '程序开发者' : '普通用户');
+
+                let interceptLogs = JSON.parse(localStorage.getItem('skyscript_intercept_logs')) || [];
+                interceptLogs.push({
+                    username: currentUser.username,
+                    role: roleName,
+                    violationMsg: violationMsg,
+                    codeSnippet: code.substring(0, 150) + (code.length > 150 ? '...' : ''),
+                    time: new Date().toLocaleString()
                 });
+                localStorage.setItem('skyscript_intercept_logs', JSON.stringify(interceptLogs));
 
-                transpiledCode += `    ## --- Python 转译结束 --- ##\n`;
-                transpiledCode += `    print "文件 ${fileName} 转译成功！"\n`;
-                transpiledCode += `end prog`;
+                if (!isPrivileged) {
+                    usersDb[currentUser.username].violations = (usersDb[currentUser.username].violations || 0) + 1;
+                    if (usersDb[currentUser.username].violations >= 5) usersDb[currentUser.username].isBanned = true;
+                    localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+                    updateUIAuth();
 
-                editor.setValue(transpiledCode);
-
-                const outputArea = document.getElementById('outputArea');
-                outputArea.innerHTML = `
-                    <div class="terminal-header">Python 转译器 [成功]</div>
-                    <div class="terminal-line" style="color: #a78bfa;"><span class="terminal-prompt">&gt;&gt;</span> 文件 "${fileName}" 已成功转译为 SkyScript 格式！</div>
-                    <div class="terminal-line" style="color: #64748b;">[等待 SKY21CN 严格合规审查]</div>
-                `;
-
-                event.target.value = '';
-            };
-            reader.readAsText(file);
-        }
-
-        // --- SKY21CN 深度升级版合规与敏感話題攔截引擎 ---
-        function runSky21CnAudit() {
-            const modal = document.getElementById('sky21CnModal');
-            modal.style.display = 'flex';
-            
-            document.getElementById('cChk1').innerHTML = '<span style="color: #facc15;">正在检查...</span>';
-            document.getElementById('cChk2').innerHTML = '<span style="color: #64748b;">等待中...</span>';
-            document.getElementById('cChk3').innerHTML = '<span style="color: #64748b;">等待中...</span>';
-            document.getElementById('cChk4').innerHTML = '<span style="color: #64748b;">等待中...</span>';
-            document.getElementById('modalActionBtn').style.display = 'none';
-            document.getElementById('modalCancelBtn').style.display = 'block';
-
-            const code = editor.getValue();
-
-            // 深度敏感與法規紅線比對規則（涵蓋主權、兩岸、惡意特徵及違規代理）
-            const globalComplianceRules = [
-                // 1. 惡意代碼與木馬特徵
-                { pattern: /rm\s+-[rRfF]+/i, name: "高危文件删除破坏命令" },
-                { pattern: /\b(eval|exec|system|popen|subprocess)\s*\(/i, name: "未授权代码动态执行漏洞" },
-                // 2. 跨境代理與越牆特徵
-                { pattern: /\b(vpn|shadowsocks|trojan|clash|proxy_pass|tunnel|bypass)\b/i, name: "未授权跨境通信与代理隧道特征" },
-                // 3. 兩岸、主權與地緣政治敏感話題（真正捕捉台灣等主權定位與敏感描述）
-                { pattern: /\b(taiwan[-_\s]*independent|taiwan[-_\s]*status|taiwan[-_\s]*territory|taiwan[-_\s]*gov|1949[-_\s]*split|two[-_\s]*chinas|1[-_\s]*china[-_\s]*violate)\b/i, name: "涉台定位与主权红线不合规表述" },
-                { pattern: /\b(tui[-_\s]*fan[-_\s]*zheng[-_\s]*fu|quxiao[-_\s]*dang[-_\s]*lingdao|minzhu[-_\s]*ziyou[-_\s]*yun|ge-ming-bao-dong)\b/i, name: "涉政、顛覆體制或敏感事件混淆特征" }
-            ];
-
-            let threatDetected = false;
-            let matchedViolation = "";
-
-            // 執行全域掃描
-            for (let rule of globalComplianceRules) {
-                if (rule.pattern.test(code)) {
-                    threatDetected = true;
-                    matchedViolation = rule.name;
-                    break;
+                    document.getElementById('sChk3').innerHTML = `<span class="badge-danger">触发 SKY21CN 合规拦截 (已上报 ADMIN001)</span>`;
+                    document.getElementById('outputArea').innerHTML = `
+                        <div class="terminal-header" style="border-color: #f87171;">SKY21CN 安全合规审查报告 [已拦截并上报]</div>
+                        <div class="terminal-line terminal-error">&gt;&gt; ${violationMsg}</div>
+                        <div class="terminal-line terminal-error">&gt;&gt; 违规计次增加！目前违规次数：${usersDb[currentUser.username].violations}/5 (已自动上报管理员后台)</div>
+                    `;
+                } else {
+                    document.getElementById('sChk3').innerHTML = `<span class="badge-danger">触发拦截 (开发者免封，已上报 ADMIN001)</span>`;
+                    document.getElementById('outputArea').innerHTML = `
+                        <div class="terminal-header" style="border-color: #f87171;">SKY21CN 安全合规审查报告 [已拦截 - 开发者特权保护]</div>
+                        <div class="terminal-line terminal-error">&gt;&gt; ${violationMsg}</div>
+                        <div class="terminal-line" style="color: #10b981;">&gt;&gt; 提示：您具有 ${roleName} 身份，代码已照常拦截且已自动上报至 ADMIN001 后台日志，但免除封禁/计次。</div>
+                    `;
                 }
-            }
-
-            // 模擬嚴謹的進度分段掃描
-            setTimeout(() => {
-                document.getElementById('cChk1').innerHTML = '<span class="badge-safe">通过</span>';
-                document.getElementById('cChk2').innerHTML = '<span style="color: #facc15;">检测网络与隧道...</span>';
-                
-                setTimeout(() => {
-                    document.getElementById('cChk2').innerHTML = '<span class="badge-safe">合规</span>';
-                    document.getElementById('cChk3').innerHTML = '<span style="color: #facc15;">审查主权与地缘政治红线...</span>';
-
-                    setTimeout(() => {
-                        if (threatDetected) {
-                            document.getElementById('cChk3').innerHTML = `<span class="badge-danger">触发红线</span>`;
-                            document.getElementById('cChk4').innerHTML = `<span class="badge-danger">已被 SKY21CN 深度拦截</span>`;
-                            
-                            const outputArea = document.getElementById('outputArea');
-                            outputArea.innerHTML = `
-                                <div class="terminal-header" style="border-color: #f87171;">SKY21CN 合规审查报告 [觸發政治/主權紅線]</div>
-                                <div class="terminal-line terminal-error">&gt;&gt; [合规拦截]: 检测到违规话题与红线内容 -> "${matchedViolation}"</div>
-                                <div class="terminal-line terminal-error">&gt;&gt; 依据国家相关网络安全与地缘政治合规条例，此进程已被彻底终结。</div>
-                            `;
-                            document.getElementById('modalCancelBtn').innerText = '关闭';
-                        } else {
-                            document.getElementById('cChk3').innerHTML = '<span class="badge-safe">通过审核</span>';
-                            document.getElementById('cChk4').innerHTML = '<span class="badge-safe">全部合格 (SKY21CN 认证)</span>';
-                            
-                            document.getElementById('modalActionBtn').style.display = 'block';
-                        }
-                    }, 500);
-                }, 500);
-            }, 500);
-        }
-
-        function closeSky21CnModal() {
-            document.getElementById('sky21CnModal').style.display = 'none';
-        }
-
-        function executeAfterSky21Cn() {
-            closeSky21CnModal();
-            const outputArea = document.getElementById('outputArea');
-            outputArea.innerHTML = `
-                <div class="terminal-header">SKY21CN [合规放行并執行]</div>
-                <div class="terminal-line" style="color: #10b981;"><span class="terminal-prompt">&gt;&gt;</span> 已通过 SKY21CN 深度合规审查，正在運行程序...</div>
-            `;
-            setTimeout(executeCode, 400);
-        }
-
-        // --- 核心直译执行逻辑 ---
-        function executeCode() {
-            const code = editor.getValue();
-            const outputArea = document.getElementById('outputArea');
-            let terminalHtml = outputArea.innerHTML + '<div class="terminal-header" style="margin-top: 10px;">SkyScript v1.0.0-CN [进程运行中]</div>';
-
-            const lines = code.split('\n');
-            let i = 0;
-            let hasOutput = false;
-
-            while (i < lines.length) {
-                let rawLine = lines[i];
-                let line = rawLine.trim();
-
-                if (!line || line.startsWith('##')) { i++; continue; }
-
-                hasOutput = true;
-                if (line.startsWith('set window.title')) {
-                    let title = line.replace('set window.title', '').trim().replace(/^"|"$/g, '');
-                    terminalHtml += `<div class="terminal-line"><span class="terminal-prompt">&gt;&gt;</span> [窗口标题]: ${title}</div>`;
-                } else if (line.startsWith('set window.size')) {
-                    let size = line.replace('set window.size', '').trim().replace(/^"|"$/g, '');
-                    terminalHtml += `<div class="terminal-line"><span class="terminal-prompt">&gt;&gt;</span> [窗口尺寸]: ${size}</div>`;
-                } else if (line.startsWith('print ')) {
-                    let content = line.substring(6).trim().replace(/^"|"$/g, '');
-                    terminalHtml += `<div class="terminal-line" style="color: #fca5a5;"><span class="terminal-prompt">&gt;&gt;</span> ${content}</div>`;
-                } else if (line.startsWith('def class')) {
-                    let blockName = line.replace('def class', '').trim();
-                    terminalHtml += `<div class="terminal-line" style="color: #fbbf24;"><span class="terminal-prompt">&gt;&gt;</span> 进入代码块: ${blockName}</div>`;
-                } else if (line === 'skip to' || line === 'skip') {
-                    terminalHtml += `<div class="terminal-line" style="color: #facc15;"><span class="terminal-prompt">&gt;&gt;</span> 正在跳过指定区块...</div>`;
-                    i++;
-                    while (i < lines.length) {
-                        let target = lines[i].trim();
-                        if (target === 'here' || target === '}') break;
-                        i++;
-                    }
-                } else if (line.includes('=')) {
-                    let parts = line.split('=');
-                    let varName = parts[0].trim();
-                    let varValue = parts[1].trim().replace(/^"|"$/g, '');
-                    terminalHtml += `<div class="terminal-line" style="color: #34d399;"><span class="terminal-prompt">&gt;&gt;</span> 变量 [${varName}] = ${varValue}</div>`;
-                }
-                i++;
-            }
-
-            if (!hasOutput) {
-                terminalHtml += `<div class="terminal-line terminal-error">&gt;&gt; 错误：未找到可执行的合规指令。</div>`;
+                document.getElementById('appealBtn').style.display = 'block';
             } else {
-                terminalHtml += `<div class="terminal-line" style="color: #64748b; margin-top: 10px;">[进程已正常退出，状态码 0]</div>`;
+                document.getElementById('modalActionBtn').style.display = 'block';
+            }
+        }, 300);
+    }, 300);
+}
+
+// 直接強制監聽運行按鈕，確保點擊時必定會觸發審核
+// --- 完整功能版：包含违规计次、停权機制與 ADMIN001 後台上報 ---
+document.addEventListener('DOMContentLoaded', function() {
+    const runBtn = document.getElementById('runBtn') || document.querySelector('button[onclick*="Audit"]') || document.querySelector('.btn-success');
+    
+    if (runBtn) {
+        runBtn.onclick = function(e) {
+            e.preventDefault();
+            
+            // 检查当前是否有登入用户
+            if (typeof currentUser === 'undefined' || !currentUser) {
+                alert('请先登录账号后再执行代码。');
+                if (typeof openLoginModal === 'function') openLoginModal();
+                return;
             }
 
-            outputArea.innerHTML = terminalHtml;
-            outputArea.scrollTop = outputArea.scrollHeight;
-        }
+            let dbData = (typeof usersDb !== 'undefined' && usersDb[currentUser.username]) ? usersDb[currentUser.username] : { violations: 0, isBanned: false, isDev: false };
+            
+            if (dbData.isBanned) {
+                alert('您的账号已被停权，无法执行代码！');
+                return;
+            }
+
+            // 弹出审核视窗
+            let modal = document.getElementById('skyCheckModal');
+            if (modal) modal.style.display = 'flex';
+            
+            let sChk1 = document.getElementById('sChk1');
+            let sChk2 = document.getElementById('sChk2');
+            let sChk3 = document.getElementById('sChk3');
+            let actionBtn = document.getElementById('modalActionBtn');
+            let appealBtn = document.getElementById('appealBtn');
+            let outputArea = document.getElementById('outputArea');
+
+            if (sChk1) sChk1.innerHTML = '<span style="color: #facc15;">审核作品中...</span>';
+            if (sChk2) sChk2.innerHTML = '<span style="color: #facc15;">审核作品中...</span>';
+            if (sChk3) sChk3.innerHTML = '<span style="color: #facc15;">审核作品中...</span>';
+            if (actionBtn) actionBtn.style.display = 'none';
+            if (appealBtn) appealBtn.style.display = 'none';
+
+            // 抓取编辑器代码
+            let code = '';
+            if (typeof editor !== 'undefined' && editor.getValue) {
+                code = editor.getValue();
+            } else if (document.getElementById('editor')) {
+                code = document.getElementById('editor').value;
+            }
+            
+            // 归一化与敏感词/火星文/符号检测
+            let normalizedCode = code.toLowerCase().replace(/[\s\-_*\/|.,~#@!$%^&()+=\[\]{};:'"\\<>?]+/g, '');
+            let isViolating = /(颠[^\w\s]?覆|分[^\w\s]?裂|国[^\w\s]?安[^\w\s]?法|网[^\w\s]?安[^\w\s]?法|恐怖|暴动|游行|示威|邪教|台独|港独|藏独|dg|df|gm|违规|测试敏感词|badword)/i.test(code) || 
+                              /(颠[^\w\s]?覆|分[^\w\s]?裂|国[^\w\s]?安[^\w\s]?法|网[^\w\s]?安[^\w\s]?法|恐怖|暴动|游行|示威|邪教|台独|港独|藏独|dg|df|gm|违规|测试敏感词|badword)/i.test(normalizedCode);
+
+            setTimeout(function() {
+                if (isViolating) {
+                    let isPrivileged = (currentUser.username === 'ADMIN001' || dbData.isDev);
+                    let roleName = currentUser.username === 'ADMIN001' ? '管理员' : (dbData.isDev ? '程序开发者' : '普通用户');
+                    let violationMsg = "SKY21CN 拦截：检测到违规敏感字眼或符号混淆内容";
+
+                    // 1. 写入拦截日志上报至 ADMIN001 后台
+                    let interceptLogs = JSON.parse(localStorage.getItem('skyscript_intercept_logs')) || [];
+                    interceptLogs.push({
+                        username: currentUser.username,
+                        role: roleName,
+                        violationMsg: violationMsg,
+                        codeSnippet: code.substring(0, 100),
+                        time: new Date().toLocaleString()
+                    });
+                    localStorage.setItem('skyscript_intercept_logs', JSON.stringify(interceptLogs));
+
+                    // 2. 若為普通用戶，累加違規次數（達 5 次自動停權）
+                    if (!isPrivileged) {
+                        if (typeof usersDb !== 'undefined' && usersDb[currentUser.username]) {
+                            usersDb[currentUser.username].violations = (usersDb[currentUser.username].violations || 0) + 1;
+                            if (usersDb[currentUser.username].violations >= 5) {
+                                usersDb[currentUser.username].isBanned = true;
+                            }
+                            localStorage.setItem('skyscript_users_db', JSON.stringify(usersDb));
+                        }
+                        if (typeof updateUIAuth === 'function') updateUIAuth();
+                    }
+
+                    if (sChk1) sChk1.innerHTML = '<span class="badge-danger">未通过</span>';
+                    if (sChk2) sChk2.innerHTML = '<span class="badge-danger">未通过</span>';
+                    if (sChk3) sChk3.innerHTML = '<span class="badge-danger">已被拦截</span>';
+                    
+                    if (outputArea) {
+                        outputArea.innerHTML = `
+                            <div class="terminal-header" style="border-color: #f87171;">系统提示</div>
+                            <div class="terminal-line terminal-error">&gt;&gt; 审核作品中：作品未能通过合规审查。</div>
+                        `;
+                    }
+                    if (appealBtn) appealBtn.style.display = 'block';
+                } else {
+                    if (sChk1) sChk1.innerHTML = '<span class="badge-safe">通过</span>';
+                    if (sChk2) sChk2.innerHTML = '<span class="badge-safe">通过</span>';
+                    if (sChk3) sChk3.innerHTML = '<span class="badge-safe">通过</span>';
+                    if (actionBtn) actionBtn.style.display = 'block';
+                }
+            }, 400);
+        };
+    }
+});
     </script>
 </body>
 </html>
